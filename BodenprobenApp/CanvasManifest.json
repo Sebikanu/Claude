@@ -1,0 +1,14 @@
+{
+  "PublishInfo": {
+    "Description": "",
+    "DisplayName": "Bodenproben Erfassung",
+    "AppIcon": {
+      "Path": "Assets/Images/AppIcon.png"
+    },
+    "LogoFileName": "AppIcon.png"
+  },
+  "ScreenWidth": 1366,
+  "ScreenHeight": 768,
+  "DocumentLayoutOrientation": "landscape",
+  "DocumentAppType": "DesktopOrTablet"
+}

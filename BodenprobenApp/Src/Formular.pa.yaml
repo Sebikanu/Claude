@@ -1,0 +1,429 @@
+Screens:
+    Formular:
+        Properties:
+            Fill: =RGBA(245, 247, 250, 1)
+        Children:
+
+        # ---- Header ----
+        - RectHeader:
+            Control: Rectangle
+            Properties:
+                X: =0
+                Y: =0
+                Width: =App.Width
+                Height: =70
+                Fill: =RGBA(0, 120, 212, 1)
+
+        - BtnZurueck:
+            Control: Button
+            Properties:
+                X: =12
+                Y: =12
+                Width: =46
+                Height: =46
+                Text: ="←"
+                Fill: =RGBA(0, 100, 180, 1)
+                Color: =RGBA(255, 255, 255, 1)
+                BorderRadius: =6
+                FontSize: =18
+                OnSelect: =Navigate(Uebersicht, ScreenTransition.Fade)
+
+        - LblFormularTitel:
+            Control: Label
+            Properties:
+                X: =70
+                Y: =0
+                Width: =App.Width - 70
+                Height: =70
+                Text: =If(varModus = "Neu", "Neue Bodenprobe erfassen", "Bodenprobe bearbeiten")
+                Color: =RGBA(255, 255, 255, 1)
+                Size: =20
+                FontWeight: =FontWeight.Bold
+                VerticalAlign: =VerticalAlign.Middle
+
+        # ---- Formular-Karte (weißer Hintergrund) ----
+        - RectCard:
+            Control: Rectangle
+            Properties:
+                X: =24
+                Y: =88
+                Width: =App.Width - 48
+                Height: =App.Height - 110
+                Fill: =RGBA(255, 255, 255, 1)
+                BorderColor: =RGBA(220, 220, 220, 1)
+                BorderThickness: =1
+                RadiusTopLeft: =10
+                RadiusTopRight: =10
+                RadiusBottomLeft: =10
+                RadiusBottomRight: =10
+
+        # ======== Zeile 1: Labor-Nr. | Projekt-Nr. ========
+        - LblLaborNr:
+            Control: Label
+            Properties:
+                X: =48
+                Y: =108
+                Width: =140
+                Height: =24
+                Text: ="Labor-Nr. *"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - InpLaborNr:
+            Control: TextInput
+            Properties:
+                X: =48
+                Y: =132
+                Width: =260
+                Height: =40
+                Default: =If(varModus = "Bearbeiten", varSelectedProbe.'Labor-Nr', "")
+                HintText: ="z.B. LAB-2024-001"
+                BorderRadius: =6
+                BorderColor: =RGBA(200, 200, 200, 1)
+
+        - LblProjektNr:
+            Control: Label
+            Properties:
+                X: =340
+                Y: =108
+                Width: =140
+                Height: =24
+                Text: ="Projekt-Nr."
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - InpProjektNr:
+            Control: TextInput
+            Properties:
+                X: =340
+                Y: =132
+                Width: =260
+                Height: =40
+                Default: =If(varModus = "Bearbeiten", varSelectedProbe.'Projekt-Nr', "")
+                HintText: ="z.B. PRJ-2024-042"
+                BorderRadius: =6
+                BorderColor: =RGBA(200, 200, 200, 1)
+
+        # ======== Zeile 2: Projektname | Entnahmedatum ========
+        - LblProjektname:
+            Control: Label
+            Properties:
+                X: =48
+                Y: =192
+                Width: =140
+                Height: =24
+                Text: ="Projektname"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - InpProjektname:
+            Control: TextInput
+            Properties:
+                X: =48
+                Y: =216
+                Width: =540
+                Height: =40
+                Default: =If(varModus = "Bearbeiten", varSelectedProbe.Projektname, "")
+                HintText: ="Projektbezeichnung"
+                BorderRadius: =6
+                BorderColor: =RGBA(200, 200, 200, 1)
+
+        - LblEntnahmedatum:
+            Control: Label
+            Properties:
+                X: =620
+                Y: =192
+                Width: =140
+                Height: =24
+                Text: ="Entnahmedatum"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - DpEntnahmedatum:
+            Control: DatePicker
+            Properties:
+                X: =620
+                Y: =216
+                Width: =220
+                Height: =40
+                SelectedDate: =If(varModus = "Bearbeiten", varSelectedProbe.Entnahmedatum, Today())
+                Format: =DateTimeFormat.ShortDate
+
+        # ======== Zeile 3: Probenbezeichnung ========
+        - LblProbenbezeichnung:
+            Control: Label
+            Properties:
+                X: =48
+                Y: =276
+                Width: =180
+                Height: =24
+                Text: ="Probenbezeichnung"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - InpProbenbezeichnung:
+            Control: TextInput
+            Properties:
+                X: =48
+                Y: =300
+                Width: =540
+                Height: =40
+                Default: =If(varModus = "Bearbeiten", varSelectedProbe.Probenbezeichnung, "")
+                HintText: ="z.B. BK1-P3"
+                BorderRadius: =6
+                BorderColor: =RGBA(200, 200, 200, 1)
+
+        # ======== Zeile 4: Tiefe von | Tiefe bis ========
+        - LblTiefeVon:
+            Control: Label
+            Properties:
+                X: =48
+                Y: =360
+                Width: =140
+                Height: =24
+                Text: ="Tiefe von [m]"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - InpTiefeVon:
+            Control: TextInput
+            Properties:
+                X: =48
+                Y: =384
+                Width: =180
+                Height: =40
+                Default: =If(varModus = "Bearbeiten", Text(varSelectedProbe.'Tiefe-von'), "")
+                HintText: ="0.00"
+                Format: =TextInputFormat.Number
+                BorderRadius: =6
+                BorderColor: =RGBA(200, 200, 200, 1)
+
+        - LblTiefeBis:
+            Control: Label
+            Properties:
+                X: =260
+                Y: =360
+                Width: =140
+                Height: =24
+                Text: ="Tiefe bis [m]"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - InpTiefeBis:
+            Control: TextInput
+            Properties:
+                X: =260
+                Y: =384
+                Width: =180
+                Height: =40
+                Default: =If(varModus = "Bearbeiten", Text(varSelectedProbe.'Tiefe-bis'), "")
+                HintText: ="0.00"
+                Format: =TextInputFormat.Number
+                BorderRadius: =6
+                BorderColor: =RGBA(200, 200, 200, 1)
+
+        # ======== Zeile 5: Bodenart | Verpackung ========
+        - LblBodenart:
+            Control: Label
+            Properties:
+                X: =48
+                Y: =444
+                Width: =140
+                Height: =24
+                Text: ="Bodenart"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - DdBodenart:
+            Control: ComboBox
+            Properties:
+                X: =48
+                Y: =468
+                Width: =260
+                Height: =40
+                Items: =["Kies", "Sand", "Feinsand", "Schluff", "Ton", "Lehm", "Torf", "Auffüllung", "Fels", "Sonstige"]
+                DefaultSelectedItems: =If(varModus = "Bearbeiten", Filter(["Kies", "Sand", "Feinsand", "Schluff", "Ton", "Lehm", "Torf", "Auffüllung", "Fels", "Sonstige"], Value = varSelectedProbe.Bodenart), [])
+                SelectMultiple: =false
+                IsSearchable: =true
+
+        - LblVerpackung:
+            Control: Label
+            Properties:
+                X: =340
+                Y: =444
+                Width: =140
+                Height: =24
+                Text: ="Verpackung"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - DdVerpackung:
+            Control: ComboBox
+            Properties:
+                X: =340
+                Y: =468
+                Width: =260
+                Height: =40
+                Items: =["PE-Tüte", "Papiertüte", "Schraubglas", "Metalldose", "Probenzylinder", "Ringprobe", "Sonstige"]
+                DefaultSelectedItems: =If(varModus = "Bearbeiten", Filter(["PE-Tüte", "Papiertüte", "Schraubglas", "Metalldose", "Probenzylinder", "Ringprobe", "Sonstige"], Value = varSelectedProbe.Verpackung), [])
+                SelectMultiple: =false
+                IsSearchable: =true
+
+        # ======== Zeile 6: Probennehmer ========
+        - LblProbennehmer:
+            Control: Label
+            Properties:
+                X: =48
+                Y: =528
+                Width: =140
+                Height: =24
+                Text: ="Probennehmer"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - InpProbennehmer:
+            Control: TextInput
+            Properties:
+                X: =48
+                Y: =552
+                Width: =360
+                Height: =40
+                Default: =If(varModus = "Bearbeiten", varSelectedProbe.Probennehmer, "")
+                HintText: ="Name des Probennehmers"
+                BorderRadius: =6
+                BorderColor: =RGBA(200, 200, 200, 1)
+
+        # ======== Zeile 7: Bemerkungen ========
+        - LblBemerkungen:
+            Control: Label
+            Properties:
+                X: =48
+                Y: =612
+                Width: =140
+                Height: =24
+                Text: ="Bemerkungen"
+                FontWeight: =FontWeight.Semibold
+                Size: =12
+                Color: =RGBA(60, 60, 60, 1)
+
+        - InpBemerkungen:
+            Control: TextInput
+            Properties:
+                X: =48
+                Y: =636
+                Width: =820
+                Height: =80
+                Default: =If(varModus = "Bearbeiten", varSelectedProbe.Bemerkungen, "")
+                HintText: ="Freitext Bemerkungen..."
+                Mode: =TextMode.MultiLine
+                BorderRadius: =6
+                BorderColor: =RGBA(200, 200, 200, 1)
+
+        # ======== Pflichtfeld-Hinweis ========
+        - LblPflicht:
+            Control: Label
+            Properties:
+                X: =48
+                Y: =730
+                Width: =400
+                Height: =22
+                Text: ="* Pflichtfeld"
+                Size: =11
+                Color: =RGBA(180, 180, 180, 1)
+                Italic: =true
+
+        # ---- Validation-Fehler ----
+        - LblValidierung:
+            Control: Label
+            Properties:
+                X: =48
+                Y: =730
+                Width: =600
+                Height: =24
+                Text: =If(varValidierungsFehler <> "", varValidierungsFehler, "")
+                Color: =RGBA(200, 50, 50, 1)
+                Size: =12
+                Visible: =varValidierungsFehler <> ""
+
+        # ======== Buttons: Speichern | Abbrechen ========
+        - BtnSpeichern:
+            Control: Button
+            Properties:
+                X: =App.Width - 320
+                Y: =App.Height - 64
+                Width: =130
+                Height: =44
+                Text: ="Speichern"
+                Fill: =RGBA(0, 120, 212, 1)
+                Color: =RGBA(255, 255, 255, 1)
+                FontWeight: =FontWeight.Bold
+                BorderRadius: =8
+                OnSelect: |-
+                    =If(
+                        IsBlank(InpLaborNr.Text),
+                        Set(varValidierungsFehler, "Bitte Labor-Nr. eingeben."),
+
+                        If(
+                            varModus = "Neu",
+                            Collect(
+                                colBodenproben,
+                                {
+                                    'Labor-Nr': InpLaborNr.Text,
+                                    'Projekt-Nr': InpProjektNr.Text,
+                                    Projektname: InpProjektname.Text,
+                                    Entnahmedatum: DpEntnahmedatum.SelectedDate,
+                                    Probenbezeichnung: InpProbenbezeichnung.Text,
+                                    'Tiefe-von': Value(InpTiefeVon.Text),
+                                    'Tiefe-bis': Value(InpTiefeBis.Text),
+                                    Bodenart: First(DdBodenart.SelectedItems).Value,
+                                    Verpackung: First(DdVerpackung.SelectedItems).Value,
+                                    Probennehmer: InpProbennehmer.Text,
+                                    Bemerkungen: InpBemerkungen.Text
+                                }
+                            ),
+                            Patch(
+                                colBodenproben,
+                                varSelectedProbe,
+                                {
+                                    'Labor-Nr': InpLaborNr.Text,
+                                    'Projekt-Nr': InpProjektNr.Text,
+                                    Projektname: InpProjektname.Text,
+                                    Entnahmedatum: DpEntnahmedatum.SelectedDate,
+                                    Probenbezeichnung: InpProbenbezeichnung.Text,
+                                    'Tiefe-von': Value(InpTiefeVon.Text),
+                                    'Tiefe-bis': Value(InpTiefeBis.Text),
+                                    Bodenart: First(DdBodenart.SelectedItems).Value,
+                                    Verpackung: First(DdVerpackung.SelectedItems).Value,
+                                    Probennehmer: InpProbennehmer.Text,
+                                    Bemerkungen: InpBemerkungen.Text
+                                }
+                            )
+                        );
+                        Set(varValidierungsFehler, "");
+                        Navigate(Uebersicht, ScreenTransition.Fade)
+                    )
+
+        - BtnAbbrechen:
+            Control: Button
+            Properties:
+                X: =App.Width - 176
+                Y: =App.Height - 64
+                Width: =130
+                Height: =44
+                Text: ="Abbrechen"
+                Fill: =RGBA(240, 240, 240, 1)
+                Color: =RGBA(60, 60, 60, 1)
+                BorderRadius: =8
+                OnSelect: |-
+                    =Set(varValidierungsFehler, "");
+                    Navigate(Uebersicht, ScreenTransition.Fade)

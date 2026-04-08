@@ -1,0 +1,167 @@
+Screens:
+    Uebersicht:
+        Properties:
+            Fill: =RGBA(245, 247, 250, 1)
+        Children:
+
+        # ---- Header ----
+        - RectHeader:
+            Control: Rectangle
+            Properties:
+                X: =0
+                Y: =0
+                Width: =App.Width
+                Height: =70
+                Fill: =RGBA(0, 120, 212, 1)
+
+        - LblTitel:
+            Control: Label
+            Properties:
+                X: =24
+                Y: =0
+                Width: =App.Width - 160
+                Height: =70
+                Text: ="Bodenproben Übersicht"
+                Color: =RGBA(255, 255, 255, 1)
+                Size: =22
+                FontWeight: =FontWeight.Bold
+                VerticalAlign: =VerticalAlign.Middle
+
+        - BtnNeu:
+            Control: Button
+            Properties:
+                X: =App.Width - 150
+                Y: =12
+                Width: =130
+                Height: =46
+                Text: ="+ Neue Probe"
+                Fill: =RGBA(255, 255, 255, 1)
+                Color: =RGBA(0, 120, 212, 1)
+                FontWeight: =FontWeight.Bold
+                BorderRadius: =6
+                OnSelect: |-
+                    =Set(varModus, "Neu");
+                    Set(varSelectedProbe, Blank());
+                    Navigate(Formular, ScreenTransition.Fade)
+
+        # ---- Suchleiste ----
+        - InpSuche:
+            Control: TextInput
+            Properties:
+                X: =24
+                Y: =90
+                Width: =400
+                Height: =40
+                HintText: ="Suche nach Projekt, Labor-Nr., Probennehmer..."
+                BorderRadius: =6
+                BorderColor: =RGBA(200, 200, 200, 1)
+
+        # ---- Galerie ----
+        - GalProben:
+            Control: Gallery
+            Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
+            Properties:
+                X: =24
+                Y: =150
+                Width: =App.Width - 48
+                Height: =App.Height - 170
+                Items: |-
+                    =Filter(
+                        colBodenproben,
+                        InpSuche.Text = "" ||
+                        TextContains(Projektname, InpSuche.Text) ||
+                        TextContains('Labor-Nr', InpSuche.Text) ||
+                        TextContains(Probennehmer, InpSuche.Text)
+                    )
+                TemplatePadding: =8
+                TemplateSize: =90
+            Children:
+
+            - RectZeile:
+                Control: Rectangle
+                Properties:
+                    X: =0
+                    Y: =0
+                    Width: =Parent.TemplateWidth
+                    Height: =Parent.TemplateSize - 4
+                    Fill: =RGBA(255, 255, 255, 1)
+                    BorderColor: =RGBA(220, 220, 220, 1)
+                    BorderThickness: =1
+                    RadiusTopLeft: =8
+                    RadiusTopRight: =8
+                    RadiusBottomLeft: =8
+                    RadiusBottomRight: =8
+
+            - LblLaborNr:
+                Control: Label
+                Properties:
+                    X: =16
+                    Y: =8
+                    Width: =200
+                    Height: =26
+                    Text: ="Labor-Nr: " & ThisItem.'Labor-Nr'
+                    FontWeight: =FontWeight.Bold
+                    Color: =RGBA(0, 120, 212, 1)
+                    Size: =13
+
+            - LblProjekt:
+                Control: Label
+                Properties:
+                    X: =16
+                    Y: =34
+                    Width: =350
+                    Height: =22
+                    Text: =ThisItem.Projektname & " (" & ThisItem.'Projekt-Nr' & ")"
+                    Size: =12
+                    Color: =RGBA(50, 50, 50, 1)
+
+            - LblDatum:
+                Control: Label
+                Properties:
+                    X: =16
+                    Y: =56
+                    Width: =250
+                    Height: =22
+                    Text: ="Entnahme: " & Text(ThisItem.Entnahmedatum, "DD.MM.YYYY")
+                    Size: =11
+                    Color: =RGBA(120, 120, 120, 1)
+
+            - LblProbennehmer:
+                Control: Label
+                Properties:
+                    X: =300
+                    Y: =56
+                    Width: =200
+                    Height: =22
+                    Text: =ThisItem.Probennehmer
+                    Size: =11
+                    Color: =RGBA(120, 120, 120, 1)
+
+            - IcnBearbeiten:
+                Control: Icon
+                Variant: Edit
+                Properties:
+                    X: =Parent.TemplateWidth - 90
+                    Y: =28
+                    Width: =32
+                    Height: =32
+                    Color: =RGBA(0, 120, 212, 1)
+                    OnSelect: |-
+                        =Set(varModus, "Bearbeiten");
+                        Set(varSelectedProbe, ThisItem);
+                        Navigate(Formular, ScreenTransition.Fade)
+
+            - IcnLoeschen:
+                Control: Icon
+                Variant: Trash
+                Properties:
+                    X: =Parent.TemplateWidth - 48
+                    Y: =28
+                    Width: =32
+                    Height: =32
+                    Color: =RGBA(210, 50, 50, 1)
+                    OnSelect: |-
+                        =If(
+                            Confirm("Probe '" & ThisItem.'Labor-Nr' & "' wirklich löschen?"),
+                            Remove(colBodenproben, ThisItem)
+                        )

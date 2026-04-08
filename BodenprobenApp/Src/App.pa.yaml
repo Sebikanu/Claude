@@ -1,0 +1,8 @@
+App:
+    Properties:
+        OnStart: |-
+            =ClearCollect(
+                colBodenproben,
+                {}
+            );
+            Set(varCurrentScreen, "Uebersicht")

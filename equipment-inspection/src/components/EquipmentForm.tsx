@@ -73,6 +73,7 @@ export default function EquipmentForm({ isEdit }: { isEdit?: boolean }) {
     const data = {
       ...form,
       lastInspectionDate: form.lastInspectionDate || null,
+      nextInspectionDate: null,
     };
 
     if (isEdit && selectedId) {

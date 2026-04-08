@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Search, Pencil, Trash2, ClipboardPlus, Filter } from 'lucide-react';
+import { Plus, Search, Pencil, Trash2, ClipboardPlus, SlidersHorizontal } from 'lucide-react';
 import { useStore, getEquipmentStatus, getDaysUntilInspection } from '../store/useStore';
 import { CATEGORY_ICONS, INTERVAL_LABELS } from '../types';
 import StatusBadge from './StatusBadge';
@@ -11,7 +11,6 @@ export default function EquipmentList() {
   const deleteEquipment = useStore((s) => s.deleteEquipment);
   const setActiveView = useStore((s) => s.setActiveView);
   const setSelectedEquipmentId = useStore((s) => s.setSelectedEquipmentId);
-  const selectedEquipmentId = useStore((s) => s.selectedEquipmentId);
 
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -31,16 +30,8 @@ export default function EquipmentList() {
     return matchSearch && matchStatus && matchCategory;
   });
 
-  const handleEdit = (id: string) => {
-    setSelectedEquipmentId(id);
-    setActiveView('equipment-edit');
-  };
-
-  const handleNewInspection = (id: string) => {
-    setSelectedEquipmentId(id);
-    setActiveView('inspection-new');
-  };
-
+  const handleEdit = (id: string) => { setSelectedEquipmentId(id); setActiveView('equipment-edit'); };
+  const handleNewInspection = (id: string) => { setSelectedEquipmentId(id); setActiveView('inspection-new'); };
   const handleDelete = (id: string) => {
     const eq = equipment.find((e) => e.id === id);
     if (confirm(`Gerät "${eq?.name}" wirklich löschen? Alle Prüfungen werden ebenfalls gelöscht.`)) {
@@ -49,26 +40,30 @@ export default function EquipmentList() {
   };
 
   return (
-    <div className="p-6 space-y-5">
+    <div className="p-6 space-y-4">
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-48">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+        <div
+          className="relative flex-1 min-w-48"
+        >
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             type="text"
-            placeholder="Gerät, Seriennummer, Ort suchen…"
+            placeholder="Gerät, Seriennummer, Ort…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl outline-none bg-white"
+            style={{ border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <Filter size={15} className="text-slate-400" />
+          <SlidersHorizontal size={14} className="text-slate-400" />
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="border border-slate-200 rounded-lg text-sm px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="text-sm px-3 py-2.5 rounded-xl outline-none bg-white cursor-pointer"
+            style={{ border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
           >
             <option value="all">Alle Status</option>
             <option value="ok">In Ordnung</option>
@@ -80,107 +75,119 @@ export default function EquipmentList() {
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="border border-slate-200 rounded-lg text-sm px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="text-sm px-3 py-2.5 rounded-xl outline-none bg-white cursor-pointer"
+            style={{ border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
           >
             <option value="all">Alle Kategorien</option>
-            {categories.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
+            {categories.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
 
         <button
           onClick={() => { setSelectedEquipmentId(null); setActiveView('equipment-new'); }}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors shadow-sm"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white"
+          style={{ background: 'linear-gradient(135deg,#2563eb,#4f46e5)', boxShadow: '0 2px 8px rgba(79,70,229,0.3)' }}
         >
-          <Plus size={16} />
+          <Plus size={15} strokeWidth={2.5} />
           Neues Gerät
         </button>
       </div>
 
-      {/* Results count */}
-      <p className="text-sm text-slate-500">{filtered.length} von {equipment.length} Geräten</p>
+      {/* Count */}
+      <p className="text-xs text-slate-400 font-medium">{filtered.length} von {equipment.length} Geräten</p>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{ background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.05)' }}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="text-left px-5 py-3.5 font-semibold text-slate-600">Gerät</th>
-                <th className="text-left px-4 py-3.5 font-semibold text-slate-600 hidden md:table-cell">Kategorie</th>
-                <th className="text-left px-4 py-3.5 font-semibold text-slate-600 hidden lg:table-cell">Ort / Abteilung</th>
-                <th className="text-left px-4 py-3.5 font-semibold text-slate-600 hidden lg:table-cell">Intervall</th>
-                <th className="text-left px-4 py-3.5 font-semibold text-slate-600 hidden md:table-cell">Nächste Prüfung</th>
-                <th className="text-left px-4 py-3.5 font-semibold text-slate-600">Status</th>
-                <th className="px-4 py-3.5 font-semibold text-slate-600 text-right">Aktionen</th>
+              <tr style={{ background: '#f8fafc', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                {['Gerät', 'Kategorie', 'Ort / Abteilung', 'Intervall', 'Nächste Prüfung', 'Status', ''].map((h, i) => (
+                  <th
+                    key={i}
+                    className={`px-5 py-3.5 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider ${
+                      i >= 2 && i <= 3 ? 'hidden lg:table-cell' : i === 4 ? 'hidden md:table-cell' : ''
+                    }`}
+                  >
+                    {h}
+                  </th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-12 text-slate-400">
+                  <td colSpan={7} className="text-center py-16 text-slate-400 text-sm">
                     Keine Geräte gefunden.
                   </td>
                 </tr>
               ) : (
-                filtered.map((eq) => {
+                filtered.map((eq, i) => {
                   const status = getEquipmentStatus(eq);
                   const days = getDaysUntilInspection(eq);
-                  const isSelected = eq.id === selectedEquipmentId;
                   return (
                     <tr
                       key={eq.id}
-                      className={`hover:bg-slate-50 transition-colors ${isSelected ? 'bg-blue-50' : ''}`}
+                      className="group"
+                      style={{
+                        borderBottom: i < filtered.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none',
+                      }}
                     >
-                      <td className="px-5 py-3.5">
+                      <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <span className="text-lg">{CATEGORY_ICONS[eq.category]}</span>
+                          <div
+                            className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0"
+                            style={{ background: '#f1f5f9' }}
+                          >
+                            {CATEGORY_ICONS[eq.category]}
+                          </div>
                           <div>
-                            <p className="font-semibold text-slate-800">{eq.name}</p>
+                            <p className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">{eq.name}</p>
                             <p className="text-xs text-slate-400">{eq.serialNumber || '–'}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-3.5 hidden md:table-cell text-slate-600">{eq.category}</td>
-                      <td className="px-4 py-3.5 hidden lg:table-cell text-slate-600">
-                        <span>{eq.location}</span>
-                        {eq.department && <span className="text-slate-400"> · {eq.department}</span>}
+                      <td className="px-4 py-4 text-slate-500 text-sm">{eq.category}</td>
+                      <td className="px-4 py-4 hidden lg:table-cell text-slate-500 text-sm">
+                        {eq.location}{eq.department && <span className="text-slate-300"> · {eq.department}</span>}
                       </td>
-                      <td className="px-4 py-3.5 hidden lg:table-cell text-slate-600">
+                      <td className="px-4 py-4 hidden lg:table-cell text-slate-500 text-sm">
                         {INTERVAL_LABELS[eq.inspectionInterval]}
                       </td>
-                      <td className="px-4 py-3.5 hidden md:table-cell text-slate-600">
+                      <td className="px-4 py-4 hidden md:table-cell text-slate-500 text-sm">
                         {eq.nextInspectionDate
                           ? format(parseISO(eq.nextInspectionDate), 'd. MMM yyyy', { locale: de })
-                          : '–'}
+                          : <span className="text-slate-300">–</span>}
                       </td>
-                      <td className="px-4 py-3.5">
+                      <td className="px-4 py-4">
                         <StatusBadge status={status} days={days} />
                       </td>
-                      <td className="px-4 py-3.5">
-                        <div className="flex items-center justify-end gap-1">
-                          <button
-                            onClick={() => handleNewInspection(eq.id)}
+                      <td className="px-4 py-4">
+                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ActionBtn
                             title="Prüfung dokumentieren"
-                            className="p-1.5 rounded-lg hover:bg-blue-50 hover:text-blue-600 text-slate-400 transition-colors"
+                            onClick={() => handleNewInspection(eq.id)}
+                            hoverStyle="hover:bg-blue-50 hover:text-blue-600"
                           >
-                            <ClipboardPlus size={16} />
-                          </button>
-                          <button
-                            onClick={() => handleEdit(eq.id)}
+                            <ClipboardPlus size={15} />
+                          </ActionBtn>
+                          <ActionBtn
                             title="Bearbeiten"
-                            className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 transition-colors"
+                            onClick={() => handleEdit(eq.id)}
+                            hoverStyle="hover:bg-slate-100"
                           >
-                            <Pencil size={16} />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(eq.id)}
+                            <Pencil size={15} />
+                          </ActionBtn>
+                          <ActionBtn
                             title="Löschen"
-                            className="p-1.5 rounded-lg hover:bg-red-50 hover:text-red-600 text-slate-400 transition-colors"
+                            onClick={() => handleDelete(eq.id)}
+                            hoverStyle="hover:bg-red-50 hover:text-red-600"
                           >
-                            <Trash2 size={16} />
-                          </button>
+                            <Trash2 size={15} />
+                          </ActionBtn>
                         </div>
                       </td>
                     </tr>
@@ -192,5 +199,22 @@ export default function EquipmentList() {
         </div>
       </div>
     </div>
+  );
+}
+
+function ActionBtn({ children, title, onClick, hoverStyle }: {
+  children: React.ReactNode;
+  title: string;
+  onClick: () => void;
+  hoverStyle: string;
+}) {
+  return (
+    <button
+      title={title}
+      onClick={onClick}
+      className={`p-1.5 rounded-lg text-slate-400 transition-colors ${hoverStyle}`}
+    >
+      {children}
+    </button>
   );
 }

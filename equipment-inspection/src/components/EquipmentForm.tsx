@@ -95,12 +95,12 @@ export default function EquipmentForm({ isEdit }: { isEdit?: boolean }) {
         Zurück zur Liste
       </button>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
-        <div className="px-6 py-5 border-b border-slate-100">
-          <h2 className="text-lg font-bold text-slate-800">
+      <div className="rounded-2xl overflow-hidden" style={{ background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.05)' }}>
+        <div className="px-6 py-5" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+          <h2 className="text-lg font-bold text-slate-900 tracking-tight">
             {isEdit ? 'Gerät bearbeiten' : 'Neues Gerät hinzufügen'}
           </h2>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-slate-400 mt-0.5">
             Füllen Sie alle relevanten Felder aus, um das Gerät zu erfassen.
           </p>
         </div>
@@ -217,15 +217,17 @@ export default function EquipmentForm({ isEdit }: { isEdit?: boolean }) {
             <button
               type="button"
               onClick={() => { setSelectedEquipmentId(null); setActiveView('equipment'); }}
-              className="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-600"
+              style={{ border: '1px solid rgba(0,0,0,0.1)', background: '#f8fafc' }}
             >
               Abbrechen
             </button>
             <button
               type="submit"
-              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
+              style={{ background: 'linear-gradient(135deg,#2563eb,#4f46e5)', boxShadow: '0 2px 8px rgba(79,70,229,0.3)' }}
             >
-              <Save size={16} />
+              <Save size={15} />
               {isEdit ? 'Änderungen speichern' : 'Gerät hinzufügen'}
             </button>
           </div>

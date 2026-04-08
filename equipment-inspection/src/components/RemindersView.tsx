@@ -48,7 +48,7 @@ export default function RemindersView() {
   return (
     <div className="p-6 space-y-6">
       {/* Notification toggle */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex items-center justify-between">
+      <div className="rounded-2xl p-5 flex items-center justify-between" style={{ background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.05)' }}>
         <div className="flex items-center gap-3">
           <div className={`p-2.5 rounded-lg ${notificationsEnabled ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-400'}`}>
             {notificationsEnabled ? <Bell size={20} /> : <BellOff size={20} />}
@@ -76,7 +76,7 @@ export default function RemindersView() {
 
       {/* Summary banner */}
       {overdue.length + warning.length + uninspected.length === 0 ? (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-6 flex items-center gap-4">
+        <div className="rounded-2xl p-6 flex items-center gap-4" style={{ background: 'rgba(22,163,74,0.06)', border: '1px solid rgba(22,163,74,0.2)' }}>
           <CheckCircle size={32} className="text-green-500 shrink-0" />
           <div>
             <p className="font-bold text-green-800">Alles in Ordnung!</p>
@@ -170,7 +170,7 @@ function Section({
   onInspect: (id: string) => void;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="rounded-2xl overflow-hidden" style={{ background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.05)' }}>
       <div className={`px-5 py-3.5 border-b flex items-center gap-2 ${headerClass}`}>
         {icon}
         <h3 className="font-semibold text-slate-800 text-sm">{title}</h3>

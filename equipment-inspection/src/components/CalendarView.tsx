@@ -74,9 +74,9 @@ export default function CalendarView() {
     <div className="p-6 space-y-5">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Calendar */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="lg:col-span-2 rounded-2xl overflow-hidden" style={{ background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.05)' }}>
           {/* Month navigation */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
             <button
               onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
               className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
@@ -95,7 +95,7 @@ export default function CalendarView() {
           </div>
 
           {/* Day headers */}
-          <div className="grid grid-cols-7 border-b border-slate-100">
+          <div className="grid grid-cols-7" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)', background: '#f8fafc' }}>
             {['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map((d) => (
               <div key={d} className="text-center text-xs font-semibold text-slate-400 py-2.5">
                 {d}
